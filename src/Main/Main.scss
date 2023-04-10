@@ -2,32 +2,33 @@
     header {
         display: flex;
         justify-content: space-between;
-        padding: 20px;
+        padding: 15px 20px;
         border-bottom: 1px solid rgba(0, 0, 0, 0.216);
 
         .left__header {
             display: flex;
             gap: 28px;
+            align-items: center;
 
             .check-main {
                 display: none;
             }
 
             .btn-main {
-                width: 104.6px;
-                height: 50px;
+                width: 79.2px;
+                height: 35px;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 background-color: white;
-                border: solid 1px black;
+                border: solid 1px #828487;
 
                 span {
                     display: block;
                     position: relative;
                     width: 20px;
-                    background-color: #000000;
+                    background-color: #828487;
                     height: 1px;
                     border-radius: 20%;
                 }
@@ -39,8 +40,9 @@
                     display: block;
                     top: 5px;
                     height: 2px;
-                    background-color: #000000;
+                    background-color: #828487;
                     border-radius: 20%;
+                    transition: transform 0.1s;
 
                 }
 
@@ -51,8 +53,9 @@
                     display: block;
                     top: -7px;
                     height: 2px;
-                    background-color: #000000;
+                    background-color: #828487;
                     border-radius: 20%;
+                    transition: transform 0.1s;
 
                 }
 
@@ -71,6 +74,10 @@
                 .check-main:checked+span {
                     background-color: inherit;
                 }
+
+
+
+
             }
 
             .btn-main:hover {
@@ -130,6 +137,18 @@
                     transition: 0.3s;
                 }
 
+                .active {
+                    background: linear-gradient(218.57deg, #FFAB18 -6.67%, #FF2197 137.69%);
+                    color: white;
+                    transition: 0.3s;
+                    svg {
+                        path,
+                        circle {
+                            stroke: white;
+                        }
+                    }
+                }
+
                 a:hover {
                     background: linear-gradient(218.57deg, #FFAB18 -6.67%, #FF2197 137.69%);
                     color: white;
@@ -140,12 +159,6 @@
                         path,
                         circle {
                             stroke: white;
-                        }
-                    }
-
-                    .homesvg {
-                        path {
-                            fill: white;
                         }
                     }
                 }
@@ -204,19 +217,22 @@
         }
     }
 
+
+
     .left__main {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         padding: 24px;
-        gap: 19px;
+        gap: 15px;
         width: 125px;
         bottom: 0;
         left: 0px;
         background: #FFFFFF;
         border-right: 1px solid #E4E4E4;
         align-items: center;
+        // display: none;
 
         .block {
             cursor: pointer;
@@ -240,6 +256,17 @@
             color: #828487;
         }
 
+        .block.active {
+            background: linear-gradient(218.57deg, #FFAB18 -6.67%, #FF2197 137.69%);
+            color: white;
+
+            svg {
+                path {
+                    fill: white;
+                }
+            }
+        }
+
         .block:hover {
             background: linear-gradient(218.57deg, #FFAB18 -6.67%, #FF2197 137.69%);
             color: white;
@@ -252,16 +279,11 @@
             }
         }
 
-        .block.active {
-            background: linear-gradient(218.57deg, #FFAB18 -6.67%, #FF2197 137.69%);
-            color: white;
 
-            svg {
-                path {
-                    fill: white;
-                }
-            }
-        }
+
+
     }
+
+
 
 }
