@@ -3,8 +3,9 @@ import { ReactComponent as Home } from './media/home.svg';
 import { ReactComponent as Bills } from './media/bills.svg';
 import { ReactComponent as Order } from './media/order.svg';
 import { ReactComponent as History } from './media/history.svg';
+import { ReactComponent as Customer } from './media/customer.svg';
 
-function Header({click}) {
+function Header({ click }) {
     const headerItems = [
         {
             id: 1,
@@ -22,30 +23,27 @@ function Header({click}) {
             id: 4,
             title: 'Bills',
             img: <Bills />
+        }, {
+            id: 5,
+            title: 'Customers',
+            img: <Customer />
         },
+
     ]
 
     const [selected, setSelected] = React.useState(0);
 
     const handleClick = (index) => {
         setSelected(index);
+        console.log(index);
     }
-
-    const [main , setMain] = React.useState(false)
-
-    const inputClick = () => {
-        setMain(!main);
-        click = main
-    }
-    console.clear()
-    console.log(main);
-
     return (
         <header>
             <div className="left__header">
-                <label  htmlFor="check-main" className='btn-main'>
-                    <input onClick={inputClick} type="checkbox" id='check-main' className='check-main' />
-                    <span></span></label>
+                <svg className='back_arrow' width="100" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.9166 13.4166L11.4512 17.8821C11.3861 17.9472 11.3861 18.0527 11.4512 18.1178L15.9166 22.5833M11.4023 18H24.6666" stroke="#19191C" stroke-width="1.5" stroke-linecap="round" />
+                    <rect x="0.5" y="0.5" width="35" height="35" rx="17.5" stroke="#E4E4E4" />
+                </svg>
                 <div className="column"></div>
                 <img src="/media/Main/logo.svg" alt="Logo" />
                 <div className="title">
@@ -56,8 +54,7 @@ function Header({click}) {
             <div className="right__header">
                 <nav className="link">
                     {headerItems.map((item, index) => (
-                        <a href="#" key={index} onClick={() => handleClick(index)} className={selected === index ? 'active' : ''}>
-                            {item.img}
+                        <a>{item.img}
                             {item.title}</a>
                     ))
                     }
@@ -73,3 +70,5 @@ function Header({click}) {
 }
 
 export default Header
+
+

@@ -3,18 +3,16 @@ import './Main.scss'
 
 import Header from './Header/Header';
 import LeftMain from './LeftMain/LeftMain';
+import Food from './Foods/Food';
 const Main = () => {
-    const fixator = '1'
-    const [selected, setSelected] = React.useState(fixator);
 
-    const handleClick = () => {
-        setSelected(selected);
-    }
-
+    // console.log(Food.catID = 1);
+    console.clear()
     return (
         <div className='Main'>
             <Header />
-            <LeftMain newClass={selected ? 'flex' : 'none'} />
+            <LeftMain />
+
         </div >
     )
 
