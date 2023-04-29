@@ -5,7 +5,7 @@ import { ReactComponent as Order } from './media/order.svg';
 import { ReactComponent as History } from './media/history.svg';
 import { ReactComponent as Customer } from './media/customer.svg';
 
-function Header({ click }) {
+function Header() {
     const headerItems = [
         {
             id: 1,
@@ -31,12 +31,6 @@ function Header({ click }) {
 
     ]
 
-    const [selected, setSelected] = React.useState(0);
-
-    const handleClick = (index) => {
-        setSelected(index);
-        console.log(index);
-    }
     return (
         <header>
             <div className="left__header">

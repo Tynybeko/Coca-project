@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { ReactComponent as SVG } from '../media/coffee.svg';
 import { ReactComponent as SVG1 } from '../media/beverages.svg';
 import { ReactComponent as SVG2 } from '../media/food.svg';
@@ -6,6 +6,8 @@ import { ReactComponent as SVG3 } from '../media/appetizer.svg';
 import { ReactComponent as SVG4 } from '../media/bread.svg';
 import { ReactComponent as SVG5 } from '../media/snack.svg';
 import Food from '../Foods/Food'
+import { CartContext } from '../../context/CartContext'
+import FoodItem from '../FoodItem';
 
 
 function LeftMain() {
@@ -43,6 +45,9 @@ function LeftMain() {
         },
     ]
 
+    const [cart, setCart] = useContext(CartContext)
+
+
     const [selected, setSelected] = React.useState(0);
     const handleClick = (index) => {
         setSelected(index);
@@ -54,12 +59,12 @@ function LeftMain() {
     }
 
     const [search, setSearch] = React.useState('')
-
     const handleChange = (event) => {
         setTimeout(() => {
             setSearch(event.target.value)
         }, 300)
     }
+
     return (
         <div className="body">
             <div id='left__main' className='left__main'>
@@ -80,7 +85,7 @@ function LeftMain() {
                         <input placeholder='Search menu' type="text" onChange={handleChange} />
 
                     </div>
-                    
+
                 </div>
                 <Food catID={selected} searchI={search} />
             </div>
@@ -103,7 +108,23 @@ function LeftMain() {
                     </div>
                 </div>
                 <hr />
-                <div className="foot"></div>
+                <div className="body">
+                    <h2>Orders details</h2>
+                    <div className="changedFood">
+                        <FoodItem value={cart} />
+
+                    </div>
+                    <hr />
+                </div>
+                <div className="foot">
+                    <div className='cont'>
+                        <p>Sub Total<span>$ 62.13</span></p>
+                        <p>Tax (10%)<span>$ 1.87</span></p>
+                        <div></div>
+                        <p className='orange'>Total<span>$ 64.00</span></p>
+                    </div>
+                    <button>Pay Now</button>
+                </div>
             </section>
         </div>
     )

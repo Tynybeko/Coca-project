@@ -1,22 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Main.scss'
+import { CartContext } from '../context/CartContext';
 
 import Header from './Header/Header';
 import LeftMain from './LeftMain/LeftMain';
-import Food from './Foods/Food';
 const Main = () => {
 
-    // console.log(Food.catID = 1);
+    const [cart, setCart] = useState(JSON.parse(localStorage.getItem('changed')) || [])
+
     console.clear()
     return (
-        <div className='Main'>
-            <Header />
-            <LeftMain />
-
-        </div >
+        <CartContext.Provider value={[cart, setCart]}>
+            <div className='Main'>
+                <Header />
+                <LeftMain />
+            </div >
+        </CartContext.Provider>
     )
-
-
 };
 
 export default Main;
