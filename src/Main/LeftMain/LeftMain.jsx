@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext} from 'react'
 import { ReactComponent as SVG } from '../media/coffee.svg';
 import { ReactComponent as SVG1 } from '../media/beverages.svg';
 import { ReactComponent as SVG2 } from '../media/food.svg';
@@ -6,11 +6,9 @@ import { ReactComponent as SVG3 } from '../media/appetizer.svg';
 import { ReactComponent as SVG4 } from '../media/bread.svg';
 import { ReactComponent as SVG5 } from '../media/snack.svg';
 import Food from '../Foods/Food'
-// import { CartContext } from '../../context/CartContext'
 import FoodItem from '../FoodItem';
-import { CartContext } from '../../context/CartContext';
+import { CartContext} from '../../context/CartContext';
 import Payment from '../Pay/Payment';
-import { act } from 'react-dom/test-utils';
 
 
 function getTotal(arr) {
@@ -61,15 +59,15 @@ function LeftMain() {
     const handleToggle = () => {
         setIsChecked(!isChecked);
     }
-    const [active, setActive] = React.useState(false)
+    const [checked, setCheck] = React.useState(false)
     const [search, setSearch] = React.useState('')
-    console.log(active);
     const handleChange = (event) => {
         setTimeout(() => {
             setSearch(event.target.value)
         }, 300)
     }
     const [cart, setCart] = useContext(CartContext)
+
     return (
         <div className="body">
             <div id='left__main' className='left__main'>
@@ -95,7 +93,7 @@ function LeftMain() {
                 <Food catID={selected} searchI={search} />
             </div>
             {
-                active ? <Payment value={active} /> : null
+                checked ? <Payment value={checked} /> : null
             }
             <section className="right__main">
                 <div className="head">
@@ -131,7 +129,7 @@ function LeftMain() {
                         <p className='orange'>Total<span>$ {((getTotal(cart) / 100 * 10) + getTotal(cart)).toFixed(2)}</span></p>
                     </div>
                     <button onClick={() => {
-                        setActive(!active)
+                       setCheck(!checked)
                     }}>Pay Now</button>
                 </div>
             </section>
