@@ -6,17 +6,7 @@ import React, { useState } from 'react';
 
 
 function Login({ item }) {
-    let user = [
-        {
-            id: 1,
-            userName: 'Tynybek',
-            pasword: 1234
-        }, {
-            id: 2,
-            userName: 'Majid',
-            pasword: 4321
-        },
-    ]
+    const [user, setUser] = React.useState(JSON.parse(localStorage.getItem('users')) || []);
     const [inputValues, setInputValues] = useState({
         inputValue1: '',
         inputValue2: '',
@@ -34,10 +24,8 @@ function Login({ item }) {
         // Делаем что-то с полученными значениями из inputValues, например, выводим их в консоль
         if (user.some(item => item.userName == inputValues.inputValue1 && item.pasword == inputValues.inputValue2)) {
             item(true)
-            console.log(123213);
         } else {
             item(false)
-            console.log(7777777);
         }
     }
     return (

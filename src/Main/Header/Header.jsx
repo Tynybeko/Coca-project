@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ReactComponent as Home } from './media/home.svg';
 import { ReactComponent as Bills } from './media/bills.svg';
 import { ReactComponent as Order } from './media/order.svg';
@@ -6,6 +6,15 @@ import { ReactComponent as History } from './media/history.svg';
 import { ReactComponent as Customer } from './media/customer.svg';
 
 function Header() {
+    const [time, setTime] = React.useState(new Date())
+    let ii = time.toLocaleString().split(',')
+    useEffect(() => {
+        setTimeout(() => {
+            setTime(new Date())
+        }, 1000)
+    }, [time])
+
+
     const headerItems = [
         {
             id: 1,
@@ -55,7 +64,7 @@ function Header() {
                 </nav>
                 <div className="userOptions">
                     <button>Dinning option</button>
-                    <div className='date'>10:53:00  26/02/2023</div>
+                    <div className='date'>{ii[1]}  {ii[0]}</div>
                     <div className="userImg"></div>
                 </div>
             </div>

@@ -50,27 +50,26 @@ function Food({ catID, searchI }) {
         },
     ]
     const [cart, setCart] = React.useContext(CartContext)
-    const FILTER = FOODS.filter((element, elemetIndex) => element.categoryId == catID)
-
+    const FILTER = FOODS.filter((element, elemetIndex) => element.categoryId === catID)
+    useEffect(() => {
+        localStorage.setItem('changed', JSON.stringify(cart))
+    }, [cart])
     return (
         <div className='food__items'>
             {
                 FILTER.filter(item => item.title.toLowerCase().includes(searchI.toLowerCase())).map((item, index) => (
                     <div onClick={() => {
-                        if (cart.length == 0) {
-                            setCart(cart.concat(item))
+                        console.clear()
+                        let i = cart.find(elem => elem.id === item.id)
+                        if (i === undefined) {
+                            localStorage.setItem('changed', JSON.stringify(cart.concat(item)))
+                            setCart(JSON.parse(localStorage.getItem('changed')))
                         } else {
-                            let i = cart.find(elem => elem.id == item.id)
-                            if (i == undefined) {
-                                setCart(cart.concat(item))
-                            } else {
-                                let a = cart.find(item2 => item2.id == item.id)
-                                a['count'] = a.count + 1
-                                cart.map(item2 => item2.id == item.id ? item2 = a : item2)
-                                setCart(cart)
-                            }
+                            i['count'] = i.count + 1
+                            cart.map(item2 => item2.id === item.id ? item2 = i : item2)
+                            localStorage.setItem('changed', JSON.stringify(cart))
+                            setCart(JSON.parse(localStorage.getItem('changed')))
                         }
-                        localStorage.setItem('changed', JSON.stringify(cart))
                     }} className="food">
                         <div className="food__img"><img src={item.img} alt="" />
                         </div>

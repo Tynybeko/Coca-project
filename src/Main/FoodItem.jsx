@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useContext } from 'react'
 import { CartContext } from '../context/CartContext'
 
-function FoodItem({ value }) {
-    const [cart, setCart] = useContext(CartContext);
 
+
+
+function FoodItem() {
+    const [cart, setCart] = useContext(CartContext);
     return (
         <div>
             {cart.map((item, idx) => <div className="items" key={idx}>
@@ -18,9 +20,9 @@ function FoodItem({ value }) {
                         </div>
                         <div className="right">
                             <button onClick={() => {
-                                item.count != 0 ? item.count -= 1 : cart.splice(idx, 1)
+                                item.count !== 1 ? item.count -= 1 : cart.splice(idx, 1)
                                 localStorage.setItem('changed', JSON.stringify(cart))
-                                setCart(cart)
+                                setCart(JSON.parse(localStorage.getItem('changed')))
                             }} className="minus"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="36" height="36" rx="18" fill="#E4E4E4" />
                                     <path d="M12.1667 18H23.8334" stroke="#9C9C9C" stroke-width="1.5" stroke-linecap="round" />
@@ -30,7 +32,7 @@ function FoodItem({ value }) {
                             <button onClick={() => {
                                 item.count += 1
                                 localStorage.setItem('changed', JSON.stringify(cart))
-                                setCart(cart)
+                                setCart(JSON.parse(localStorage.getItem('changed')))
                             }} className="plus"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="36" height="36" rx="18" fill="#19191C" />
                                     <path d="M12.1667 18.0001H23.8334M18.0001 12.1667V23.8334" stroke="white" stroke-width="1.5" stroke-linecap="round" />

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { ReactComponent as SVG } from '../media/coffee.svg';
 import { ReactComponent as SVG1 } from '../media/beverages.svg';
 import { ReactComponent as SVG2 } from '../media/food.svg';
@@ -6,9 +6,17 @@ import { ReactComponent as SVG3 } from '../media/appetizer.svg';
 import { ReactComponent as SVG4 } from '../media/bread.svg';
 import { ReactComponent as SVG5 } from '../media/snack.svg';
 import Food from '../Foods/Food'
-import { CartContext } from '../../context/CartContext'
+// import { CartContext } from '../../context/CartContext'
 import FoodItem from '../FoodItem';
+import { CartContext } from '../../context/CartContext';
+import Payment from '../Pay/Payment';
+import { act } from 'react-dom/test-utils';
 
+
+function getTotal(arr) {
+    let total = arr.reduce((acc, item) => acc += item.price * item.count, 0)
+    return total
+}
 
 function LeftMain() {
 
@@ -45,26 +53,23 @@ function LeftMain() {
         },
     ]
 
-    const [cart, setCart] = useContext(CartContext)
-
-
     const [selected, setSelected] = React.useState(0);
     const handleClick = (index) => {
         setSelected(index);
     }
     const [isChecked, setIsChecked] = React.useState(false);
-
     const handleToggle = () => {
         setIsChecked(!isChecked);
     }
-
+    const [active, setActive] = React.useState(false)
     const [search, setSearch] = React.useState('')
+    console.log(active);
     const handleChange = (event) => {
         setTimeout(() => {
             setSearch(event.target.value)
         }, 300)
     }
-
+    const [cart, setCart] = useContext(CartContext)
     return (
         <div className="body">
             <div id='left__main' className='left__main'>
@@ -89,6 +94,9 @@ function LeftMain() {
                 </div>
                 <Food catID={selected} searchI={search} />
             </div>
+            {
+                active ? <Payment value={active} /> : null
+            }
             <section className="right__main">
                 <div className="head">
                     <label htmlFor="switch__btn"><input type="checkbox" checked={isChecked} onChange={handleToggle} id='switch__btn' className='switch__btn' />
@@ -111,19 +119,20 @@ function LeftMain() {
                 <div className="body">
                     <h2>Orders details</h2>
                     <div className="changedFood">
-                        <FoodItem value={cart} />
-
+                        <FoodItem />
                     </div>
                     <hr />
                 </div>
                 <div className="foot">
                     <div className='cont'>
-                        <p>Sub Total<span>$ 62.13</span></p>
-                        <p>Tax (10%)<span>$ 1.87</span></p>
+                        <p>Sub Total<span>$ {(getTotal(cart)).toFixed(2)}</span></p>
+                        <p>Tax (10%)<span>$ {((getTotal(cart) / 100 * 10)).toFixed(2)}</span></p>
                         <div></div>
-                        <p className='orange'>Total<span>$ 64.00</span></p>
+                        <p className='orange'>Total<span>$ {((getTotal(cart) / 100 * 10) + getTotal(cart)).toFixed(2)}</span></p>
                     </div>
-                    <button>Pay Now</button>
+                    <button onClick={() => {
+                        setActive(!active)
+                    }}>Pay Now</button>
                 </div>
             </section>
         </div>
