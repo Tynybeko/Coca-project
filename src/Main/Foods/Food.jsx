@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { CartContext } from '../../context/CartContext'
-
+import { CartContext2 } from '../../context/CartContext2'
 
 function Food({ catID, searchI }) {
     const FOODS = [
@@ -49,11 +49,11 @@ function Food({ catID, searchI }) {
             count: 1
         },
     ]
-    const [cart, setCart] = React.useContext(CartContext)
+    const [cart, setCart] = React.useContext(CartContext2)
     const FILTER = FOODS.filter((element, elemetIndex) => element.categoryId === catID)
-    useEffect(() => {
-        localStorage.setItem('changed', JSON.stringify(cart))
-    }, [cart])
+    // useEffect(() => {
+    //     localStorage.setItem('changed', JSON.stringify(cart))
+    // }, [cart])
     return (
         <div className='food__items'>
             {
@@ -62,13 +62,13 @@ function Food({ catID, searchI }) {
                         console.clear()
                         let i = cart.find(elem => elem.id === item.id)
                         if (i === undefined) {
-                            localStorage.setItem('changed', JSON.stringify(cart.concat(item)))
-                            setCart(JSON.parse(localStorage.getItem('changed')))
+                            sessionStorage.setItem('changed', JSON.stringify([...cart, item]))
+                            setCart(JSON.parse(sessionStorage.getItem('changed')))
                         } else {
                             i['count'] = i.count + 1
                             cart.map(item2 => item2.id === item.id ? item2 = i : item2)
-                            localStorage.setItem('changed', JSON.stringify(cart))
-                            setCart(JSON.parse(localStorage.getItem('changed')))
+                            sessionStorage.setItem('changed', JSON.stringify(cart))
+                            setCart(JSON.parse(sessionStorage.getItem('changed')))
                         }
                     }} className="food">
                         <div className="food__img"><img src={item.img} alt="" />

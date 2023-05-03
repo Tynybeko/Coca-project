@@ -1,30 +1,65 @@
 import React, { useContext, useEffect } from 'react'
 import { CartContext } from '../../context/CartContext'
+import { CartContext2 } from '../../context/CartContext2'
+import { dblClick } from '@testing-library/user-event/dist/click'
 
-export default function Payment({ value }) {
-    const [calcNum, setCalcNum] = React.useState('')
-    const calculator = () => {
+
+
+
+
+export default function Payment({ value, setOpen }) {
+
+    const [myuser, setmyuser] = useContext(CartContext)
+    const [cart, setCart] = useContext(CartContext2)
+    const setLocal = (value) => {
+        let myloc = JSON.parse(localStorage.getItem('users'))
+        myloc.map(item => {
+            if (item.id == myuser.id) {
+                item.history = [...item.history, { id: item.history.length + 1, buyed: value, time: new Date().toJSON(), total: (total / 100 * 110).toFixed(2) }]
+            }
+        })
+        let our = myloc.find(item => item.id == myuser.id)
+        localStorage.setItem('users', JSON.stringify(myloc))
+        sessionStorage.setItem('user', JSON.stringify(our))
+        setmyuser(JSON.parse(sessionStorage.getItem('user')))
     }
+    let openRequest = indexedDB.open("store", 1);
+
+    openRequest.onupgradeneeded = function() {
+      // срабатывает, если на клиенте нет базы данных
+      // ...выполнить инициализацию...
+    };
+    
+    openRequest.onerror = function() {
+      console.error("Error", openRequest.error);
+    };
+    
+    openRequest.onsuccess = function() {
+      let db = openRequest.result;
+      // продолжить работу с базой данных, используя объект db
+    };
+    const [calcNum, setCalcNum] = React.useState('')
     const handleChange = (event) => {
         setCalcNum(event.target.value)
         setError(false)
     }
-
     useEffect(() => {
         setError(false)
     }, [calcNum])
     const [add, setAdd] = React.useState(0)
     const [error, setError] = React.useState(false)
-    const [cart, setCart] = useContext(CartContext)
-    const getTotal = cart.reduce((acc, item) => acc += item.count * item.price, 0)
-    const total = ((getTotal / 100 * 10) + getTotal).toFixed(2)
+    const [buyed, setBuyed] = React.useState(false)
+    const [conf, setConf] = React.useState(false)
     const [checked, setCheck] = React.useState(value)
+    const total = cart.reduce((acc, item) => acc += item.count * item.price, 0)
     return (
         <div className='Payment' style={{ display: checked ? 'block' : 'none' }}>
-
-
-            <div className="order__confirm">
+            <div style={{ display: conf ? 'block' : 'none' }} className="order__confirm">
                 <div className="inner">
+                    <div style={{ display: buyed ? 'block' : 'none' }} className="buyed">
+                        <div className="filter"><svg class="feather feather-check-circle" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg><h3>Buyed</h3></div>
+
+                    </div>
                     <div className="title">
                         <h3>Order confirmation</h3>
                         <p>Please confirm the order below to completed payment</p>
@@ -54,7 +89,43 @@ export default function Payment({ value }) {
                             <h4>NOTES</h4>
                             <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
                         </div>
-                        
+                        <div className="total">
+                            <div className='desc__p'> <p>SUBTOTAL</p>
+                                <p>CHANGE</p>
+                                <p>ORDER DISCOUNT</p>
+                                <p>TAX</p>
+                                <p className='br'>BILL AMOUNT</p></div>
+                            <div>
+                                <p>$ {(total).toFixed(2)}</p>
+                                <p>$ {(+calcNum - ((total / 100 * 10) + total)).toFixed(2)}</p>
+                                <p>$ 0</p>
+                                <p>{(total / 100 * 10).toFixed(2)}</p>
+                                <p className='orange'>{(total / 100 * 110).toFixed(2)}</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div className="footer">
+                        <div className="desc__methods">
+                            <p>Payment method</p>
+                            <p className="cash"><img src="./media/payMethods/cash.png" alt="Cash" /> Cash</p>
+                        </div>
+                        <div className="btn">
+                            <button onClick={() => {
+                                setConf(!conf)
+                            }}>Cancel</button>
+                            <button onClick={() => {
+                                setLocal(cart)
+                                sessionStorage.setItem('changed', JSON.stringify([]))
+                                setCart([])
+                                setBuyed(!buyed)
+                                setTimeout(() => {
+                                    setConf(!conf)
+                                    setCheck(!checked)
+                                }, 2000)
+                            }} className='conf'>Confirm</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,17 +133,17 @@ export default function Payment({ value }) {
             <div className="pay__inner">
                 <header>
                     <div className="title"><h2>Order payment</h2><svg onClick={() => {
-                        setCheck(!checked)
+                        setOpen((prev) => !prev)
                     }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 5L19 19M19 5L5 19" stroke="#19191C" stroke-width="1.5" stroke-linecap="round" />
                     </svg>
                     </div>
-                    <p>Order #102</p>
+                    <p>Order {cart.length + 1}</p>
                 </header>
                 <body>
                     <div className="bill">
                         <p>Tip Amount<span>$ 0</span></p>
-                        <p className='orange'>Total Amount<span>$ {total}</span></p>
+                        <p className='orange'>Total Amount<span>$ {(total / 100 * 110).toFixed(2)}</span></p>
                     </div>
                     <div className="paymentMethods">
                         <h4>Payment method</h4>
@@ -120,8 +191,10 @@ export default function Payment({ value }) {
                             <path d="M6 8L10.3107 11.9515C11.2665 12.8276 12.7335 12.8276 13.6893 11.9515L18 8" stroke="white" stroke-width="1.5" stroke-linecap="round" />
                         </svg>Email</button>
                         <button onClick={() => {
-                            if (total > +calcNum) {
+                            if (!(+calcNum) || total > +calcNum) {
                                 setError(true)
+                            } else {
+                                setConf(!conf)
                             }
                         }} className='tip'><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M4 11.8743L9.18415 17.683C9.26315 17.7715 9.40471 17.7725 9.48506 17.6851L20 6.25" stroke="white" stroke-width="1.5" stroke-linecap="round" />
